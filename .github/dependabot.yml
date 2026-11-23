@@ -1,0 +1,24 @@
+# One grouped PR per month for everything: Go modules, the Dockerfile base images (mise
+# builder, distroless) and the GitHub Actions. Merge by hand once CI is green.
+# The Go toolchain itself is pinned in mise/config.toml, which Dependabot doesn't read:
+# bump it by hand (see README).
+version: 2
+
+multi-ecosystem-groups:
+  monthly:
+    schedule:
+      interval: monthly
+
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    patterns: ["*"]
+    multi-ecosystem-group: monthly
+  - package-ecosystem: docker
+    directory: /
+    patterns: ["*"]
+    multi-ecosystem-group: monthly
+  - package-ecosystem: github-actions
+    directory: /
+    patterns: ["*"]
+    multi-ecosystem-group: monthly
