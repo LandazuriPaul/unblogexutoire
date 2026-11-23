@@ -1,0 +1,29 @@
+{{define "content"}}
+{{- with .Data}}
+<article class="post">
+  <header>
+    <h1>{{.Post.Title}}</h1>
+    <p class="meta">
+      <time datetime="{{isodate .Post.Date}}">{{frdate .Post.Date}}</time> ·
+      {{range $i, $a := .Post.Authors}}{{if $i}}, {{end}}<a href="/author/{{$a.Slug}}/">{{$a.Name}}</a>{{end}}
+    </p>
+    {{- if .Post.Tags}}
+    <ul class="tags">
+      {{- range .Post.Tags}}
+      <li><a href="/tag/{{.Slug}}/">{{.Name}}</a></li>
+      {{- end}}
+    </ul>
+    {{- end}}
+  </header>
+  <div class="prose">{{.Post.HTML}}</div>
+</article>
+<nav class="prev-next">
+  {{- with .Prev}}
+  <a class="prev" href="/{{.Slug}}/"><span>← Article précédent</span>{{.Title}}</a>
+  {{- end}}
+  {{- with .Next}}
+  <a class="next" href="/{{.Slug}}/"><span>Article suivant →</span>{{.Title}}</a>
+  {{- end}}
+</nav>
+{{- end}}
+{{end}}

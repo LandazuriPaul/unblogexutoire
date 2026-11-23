@@ -1,0 +1,7 @@
+{{define "content"}}
+<h1>{{.Data.Heading}}</h1>
+{{- with .Data.Intro}}
+<p class="intro">{{.}}</p>
+{{- end}}
+{{template "postlist" .Data.Posts}}
+{{end}}

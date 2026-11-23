@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/fs"
+	"slices"
 	"time"
 
 	"github.com/LandazuriPaul/unblogexutoire/internal/content"
@@ -92,7 +93,55 @@ func (s *Site) pages() []pageRoute {
 		routes = append(routes, pageRoute{path, "page.html",
 			view{Title: p.Title, Description: p.Description, Path: path, OGType: "website", Data: p}})
 	}
+	for i, p := range c.Posts {
+		data := postData{Post: p}
+		if i+1 < len(c.Posts) {
+			data.Prev = c.Posts[i+1]
+		}
+		if i > 0 {
+			data.Next = c.Posts[i-1]
+		}
+		path := "/" + p.Slug + "/"
+		routes = append(routes, pageRoute{path, "post.html",
+			view{Title: p.Title, Description: p.Description, Path: path, OGType: "article", Data: data}})
+	}
+	for _, a := range c.Authors {
+		heading := "Articles de " + a.Name
+		routes = append(routes, s.listRoute("/author/"+a.Slug+"/", heading, a.Bio, func(p *content.Post) bool {
+			return slices.Contains(p.Authors, a)
+		}))
+	}
+	for _, t := range c.Tags {
+		heading := "Articles étiquetés « " + t.Name + " »"
+		routes = append(routes, s.listRoute("/tag/"+t.Slug+"/", heading, "", func(p *content.Post) bool {
+			return slices.Contains(p.Tags, t)
+		}))
+	}
 	return routes
+}
+
+// postData is a post with its older (Prev) and newer (Next) neighbours.
+type postData struct {
+	Post       *content.Post
+	Prev, Next *content.Post
+}
+
+// listData is an author or tag page.
+type listData struct {
+	Heading, Intro string
+	Posts          []*content.Post
+}
+
+func (s *Site) listRoute(path, heading, intro string, keep func(*content.Post) bool) pageRoute {
+	var posts []*content.Post
+	for _, p := range s.cfg.Content.Posts {
+		if keep(p) {
+			posts = append(posts, p)
+		}
+	}
+	description := heading + " sur " + SiteName + "."
+	return pageRoute{path, "list.html", view{Title: heading, Description: description, Path: path, OGType: "website",
+		Data: listData{Heading: heading, Intro: intro, Posts: posts}}}
 }
 
 func (s *Site) renderPage(r pageRoute) error {
