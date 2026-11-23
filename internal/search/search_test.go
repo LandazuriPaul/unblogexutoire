@@ -30,9 +30,9 @@ func mk(slug, date, body string, a *content.Author, tags ...string) *content.Pos
 	return p
 }
 
-func slugs(r search.Result) string {
+func slugs(posts []*content.Post) string {
 	var s []string
-	for _, p := range r.Posts {
+	for _, p := range posts {
 		s = append(s, p.Slug)
 	}
 	return strings.Join(s, ",")
@@ -40,14 +40,12 @@ func slugs(r search.Result) string {
 
 func TestParseQuery(t *testing.T) {
 	cases := map[string]search.Query{
-		"page=-3":                {Page: 1},
-		"page=abc":               {Page: 1},
-		"page=2":                 {Page: 2},
-		"annee=99999":            {Page: 1},
-		"annee=2019&mois=13":     {Year: 2019, Page: 1},
-		"mois=0":                 {Page: 1},
-		"q=++été++&auteur=alice": {Text: "été", Author: "alice", Page: 1},
-		"tag=recit&mois=6":       {Tag: "recit", Month: 6, Page: 1},
+		"page=2":                 {}, // old paginated links still work: page is ignored
+		"annee=99999":            {},
+		"annee=2019&mois=13":     {Year: 2019},
+		"mois=0":                 {},
+		"q=++été++&auteur=alice": {Text: "été", Author: "alice"},
+		"tag=recit&mois=6":       {Tag: "recit", Month: 6},
 	}
 	for raw, want := range cases {
 		v, _ := url.ParseQuery(raw)
@@ -66,17 +64,17 @@ func TestTextMatchAND(t *testing.T) {
 		mk("both", "2020-01-02T00:00:00Z", "Un cœur en été", alice),
 		mk("one", "2020-01-01T00:00:00Z", "Un cœur en hiver", alice),
 	}
-	if got := slugs(search.Run(posts, search.Query{Text: "coeur ete", Page: 1}, 10)); got != "both" {
+	if got := slugs(search.Run(posts, search.Query{Text: "coeur ete"})); got != "both" {
 		t.Errorf("got %q, want both", got)
 	}
-	if got := slugs(search.Run(posts, search.Query{Text: "COEUR", Page: 1}, 10)); got != "both,one" {
+	if got := slugs(search.Run(posts, search.Query{Text: "COEUR"})); got != "both,one" {
 		t.Errorf("got %q, want both,one", got)
 	}
 }
 
 func TestTextAccentsAndApostrophes(t *testing.T) {
 	posts := []*content.Post{mk("p", "2020-01-01T00:00:00Z", "Vivement L’Été !", alice)}
-	if got := slugs(search.Run(posts, search.Query{Text: "l'ete", Page: 1}, 10)); got != "p" {
+	if got := slugs(search.Run(posts, search.Query{Text: "l'ete"})); got != "p" {
 		t.Errorf("got %q, want p", got)
 	}
 }
@@ -99,8 +97,7 @@ func TestFilters(t *testing.T) {
 		{search.Query{Author: "alice", Tag: "politique"}, "a19"},
 		{search.Query{Author: "nope"}, ""},
 	} {
-		tc.q.Page = 1
-		if got := slugs(search.Run(posts, tc.q, 10)); got != tc.want {
+		if got := slugs(search.Run(posts, tc.q)); got != tc.want {
 			t.Errorf("%+v: got %q, want %q", tc.q, got, tc.want)
 		}
 	}
@@ -108,55 +105,30 @@ func TestFilters(t *testing.T) {
 
 func TestYearBoundaryParis(t *testing.T) {
 	posts := []*content.Post{mk("nye", "2019-12-31T23:30:00Z", "x", alice)}
-	if got := slugs(search.Run(posts, search.Query{Year: 2020, Month: 1, Page: 1}, 10)); got != "nye" {
+	if got := slugs(search.Run(posts, search.Query{Year: 2020, Month: 1})); got != "nye" {
 		t.Errorf("got %q, want nye in January 2020 (Paris)", got)
 	}
-	if got := slugs(search.Run(posts, search.Query{Year: 2019, Page: 1}, 10)); got != "" {
+	if got := slugs(search.Run(posts, search.Query{Year: 2019})); got != "" {
 		t.Errorf("got %q, want nothing in 2019", got)
 	}
 }
 
-func TestPagination(t *testing.T) {
+func TestReturnsAllMatches(t *testing.T) {
 	var posts []*content.Post
 	for i := range 23 {
 		posts = append(posts, mk(fmt.Sprintf("p%02d", i), "2020-01-01T00:00:00Z", "x", alice))
 	}
-	r := search.Run(posts, search.Query{Page: 1}, 10)
-	if len(r.Posts) != 10 || r.Total != 23 || r.Pages != 3 || r.PrevPage != 0 || r.NextPage != 2 || r.Page != 1 {
-		t.Errorf("page 1 = %d posts %+v", len(r.Posts), r)
+	got := search.Run(posts, search.Query{})
+	if len(got) != 23 || got[0].Slug != "p00" || got[22].Slug != "p22" {
+		t.Errorf("got %d posts, want all 23 in their original order", len(got))
 	}
-	if r.Posts[0].Slug != "p00" {
-		t.Errorf("order changed: first = %s", r.Posts[0].Slug)
-	}
-	r = search.Run(posts, search.Query{Page: 3}, 10)
-	if len(r.Posts) != 3 || r.PrevPage != 2 || r.NextPage != 0 {
-		t.Errorf("page 3 = %d posts, prev %d next %d", len(r.Posts), r.PrevPage, r.NextPage)
-	}
-	r = search.Run(posts, search.Query{Page: 9}, 10)
-	if len(r.Posts) != 0 || r.Total != 23 || r.Pages != 3 || r.NextPage != 0 {
-		t.Errorf("page 9 = %+v", r)
-	}
-	r = search.Run(nil, search.Query{Page: 1}, 10)
-	if r.Pages != 1 || r.Total != 0 || r.NextPage != 0 {
-		t.Errorf("empty = %+v", r)
+	if got := search.Run(nil, search.Query{}); len(got) != 0 {
+		t.Errorf("no posts: got %d", len(got))
 	}
 }
 
-func TestValuesRoundTrip(t *testing.T) {
-	q := search.Query{Text: "cœur", Author: "alice", Tag: "recit", Year: 2019, Month: 6, Page: 4}
-	v := q.Values()
-	if v.Has("page") {
-		t.Errorf("Values() has page: %v", v)
-	}
-	want := q
-	want.Page = 1
-	if got := search.ParseQuery(v); got != want {
-		t.Errorf("round trip = %+v, want %+v", got, want)
-	}
-	if got := (search.Query{Page: 3}).Values(); len(got) != 0 {
-		t.Errorf("zero query Values = %v", got)
-	}
-	if !(search.Query{Page: 3}).IsZero() || q.IsZero() {
+func TestIsZero(t *testing.T) {
+	if !(search.Query{}).IsZero() || (search.Query{Month: 6}).IsZero() {
 		t.Error("IsZero wrong")
 	}
 }

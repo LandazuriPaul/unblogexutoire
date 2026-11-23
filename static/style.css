@@ -102,8 +102,8 @@ h2 a:hover { color: var(--pen); text-decoration: underline; }
 
 .more { margin-top: 2.5rem; font-style: italic; }
 
-/* Previous/next and pagination: the two directions, one on each side. */
-.prev-next, .pagination {
+/* Previous/next post links: the two directions, one on each side. */
+.prev-next {
   display: flex; justify-content: space-between; gap: 1.5rem;
   margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--rule);
 }

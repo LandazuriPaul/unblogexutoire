@@ -18,8 +18,6 @@ import (
 // SiteName is the blog's only branding.
 const SiteName = "Un blog exutoire"
 
-const homePosts = 5
-
 // Config is what New needs to build the site.
 type Config struct {
 	Content *content.Site
@@ -107,7 +105,7 @@ func (s *Site) pages() []pageRoute {
 	c := s.cfg.Content
 	routes := []pageRoute{
 		{"/", "home.html", view{Description: "Textes, récits et coups de gueule de quelques ami·es.", Path: "/", OGType: "website",
-			Data: c.Posts[:min(homePosts, len(c.Posts))]}},
+			Data: c.Posts}},
 	}
 	for _, p := range c.Pages {
 		path := "/" + p.Slug + "/"

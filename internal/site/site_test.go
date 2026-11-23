@@ -26,19 +26,16 @@ func TestFormatDate(t *testing.T) {
 	}
 }
 
-func TestHomeShowsFiveLatest(t *testing.T) {
+func TestHomeShowsAllPosts(t *testing.T) {
 	body := do(newHandler(t, false), "GET", "/").Body.String()
 	var order []int
 	for _, n := range []string{"7", "6", "5", "4", "3", "2", "1"} {
 		order = append(order, strings.Index(body, "Titre "+n+"<"))
 	}
-	for i, idx := range order[:5] {
+	for i, idx := range order {
 		if idx < 0 || (i > 0 && idx < order[i-1]) {
 			t.Errorf("post %d missing or out of order (indexes %v)", 7-i, order)
 		}
-	}
-	if order[5] >= 0 || order[6] >= 0 {
-		t.Error("home shows more than 5 posts")
 	}
 	if !strings.Contains(body, `href="/articles/"`) {
 		t.Error("no link to /articles/")

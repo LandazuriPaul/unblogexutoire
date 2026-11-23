@@ -50,22 +50,11 @@
   </p>
 </form>
 
-<p class="count">{{.Result.Total}} article{{if gt .Result.Total 1}}s{{end}}</p>
-{{- if .Result.Posts}}
-{{template "postlist" .Result.Posts}}
+<p class="count">{{len .Posts}} article{{if gt (len .Posts) 1}}s{{end}}</p>
+{{- if .Posts}}
+{{template "postlist" .Posts}}
 {{- else}}
 <p class="empty">Aucun article ne correspond à ces critères.</p>
-{{- end}}
-
-{{- if or .PrevURL .NextURL}}
-<nav class="pagination">
-  {{- with .PrevURL}}
-  <a class="prev" href="{{.}}">← Plus récents</a>
-  {{- end}}
-  {{- with .NextURL}}
-  <a class="next" href="{{.}}">Plus anciens →</a>
-  {{- end}}
-</nav>
 {{- end}}
 {{- end}}
 {{end}}

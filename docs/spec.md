@@ -66,7 +66,7 @@ get one. `backup/` stays git-ignored.
 
 | Route                | Content                                                              |
 |----------------------|----------------------------------------------------------------------|
-| `/`                  | 5 latest published posts (title, date, authors, description) + link to `/articles/` |
+| `/`                  | All published posts, newest first (title, date, authors, description) + link to `/articles/` |
 | `/articles/`         | Search and list (see §5)                                             |
 | `/{slug}/`           | Post or page                                                         |
 | `/author/{slug}/`    | Author name, bio, all their posts                                    |
@@ -85,15 +85,15 @@ and « Article précédent / suivant » links. No reading time, no "updated on" 
 ## 5. Posts page and search
 
 - A GET form with no JS. Query parameters: `q`, `auteur` (author slug), `tag` (tag slug),
-  `annee`, `mois` and `page`.
+  `annee` and `mois`. Any other parameter (such as `page`, from before pagination was
+  removed) is ignored.
 - Dropdowns are filled from the data: the authors, the tags in use, and the years that have
   posts. The month dropdown is optional (1–12).
 - Free text: the query and the documents are lowercased and accent-folded, then split on
   non-letters. A post matches if **every** query word appears as a substring of its folded
   title, description or body text.
-- All filters are combined with AND. Results are sorted newest first, 10 per page, with
-  « Plus récents / Plus anciens » links that keep the filters. An out-of-range page gives an
-  empty list, not an error.
+- All filters are combined with AND. Every matching post is listed on one page, newest first.
+  There is no pagination: the archive is small enough to scroll.
 - The total result count is shown ("12 articles").
 
 ## 6. Presentation
@@ -116,7 +116,7 @@ and « Article précédent / suivant » links. No reading time, no "updated on" 
 ## 8. Quality
 
 - `go test ./...` covers content validation over the real `content/` directory, search matching
-  (accents, AND, filters, pagination), routes (status codes, redirects, 404) and the feed.
+  (accents, AND, filters), routes (status codes, redirects, 404) and the feed.
 - `go vet` and `gofmt` run in CI.
 
 ## 9. Tooling (mise)

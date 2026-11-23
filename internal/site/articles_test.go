@@ -31,27 +31,23 @@ func get(t *testing.T, h http.Handler, target string) string {
 
 var resultLink = regexp.MustCompile(`<h2><a href="/[a-z0-9-]+/">`)
 
-func TestArticlesDefault(t *testing.T) {
+func TestArticlesListsAll(t *testing.T) {
 	b := get(t, manyHandler(t), "/articles/")
-	if n := len(resultLink.FindAllString(b, -1)); n != 10 {
-		t.Errorf("%d results, want 10", n)
+	if n := len(resultLink.FindAllString(b, -1)); n != 23 {
+		t.Errorf("%d results, want all 23", n)
 	}
-	if !strings.Contains(b, "23 articles") || !strings.Contains(b, `href="/articles/?page=2"`) {
-		t.Error("missing count or next link")
+	if !strings.Contains(b, "23 articles") {
+		t.Error("missing count")
 	}
-	if strings.Contains(b, "Plus récents") {
-		t.Error("first page has a previous link")
+	if strings.Contains(b, "page=") || strings.Contains(b, "Plus anciens") || strings.Contains(b, "Plus récents") {
+		t.Error("page still has pagination links")
 	}
 }
 
-func TestArticlesFilterKeepsParams(t *testing.T) {
+func TestArticlesOldPageLinksShowAll(t *testing.T) {
 	b := get(t, manyHandler(t), "/articles/?auteur=alice&page=2")
-	if !strings.Contains(b, `href="/articles/?auteur=alice&amp;page=3"`) ||
-		!strings.Contains(b, `href="/articles/?auteur=alice&amp;page=1"`) {
-		t.Error("prev/next links drop the filters")
-	}
-	if !strings.Contains(b, "Plus récents") || !strings.Contains(b, "Plus anciens") {
-		t.Error("missing prev/next labels")
+	if n := len(resultLink.FindAllString(b, -1)); n != 23 {
+		t.Errorf("?page=2: %d results, want all 23", n)
 	}
 }
 

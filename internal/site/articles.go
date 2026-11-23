@@ -2,16 +2,12 @@ package site
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/LandazuriPaul/unblogexutoire/internal/content"
 	"github.com/LandazuriPaul/unblogexutoire/internal/search"
 )
 
-const (
-	articlesPath    = "/articles/"
-	articlesPerPage = 10
-)
+const articlesPath = "/articles/"
 
 type monthOption struct {
 	Value int
@@ -20,13 +16,12 @@ type monthOption struct {
 
 // articlesData feeds templates/articles.html.
 type articlesData struct {
-	Query            search.Query
-	Result           search.Result
-	Authors          []*content.Author
-	Tags             []content.Tag
-	Years            []int
-	Months           []monthOption
-	PrevURL, NextURL string
+	Query   search.Query
+	Posts   []*content.Post // every match, newest first
+	Authors []*content.Author
+	Tags    []content.Tag
+	Years   []int
+	Months  []monthOption
 }
 
 // serveArticles renders the search page for this request's query string.
@@ -35,19 +30,13 @@ func (s *Site) serveArticles(w http.ResponseWriter, r *http.Request) {
 	q := search.ParseQuery(r.URL.Query())
 	data := articlesData{
 		Query:   q,
-		Result:  search.Run(c.Posts, q, articlesPerPage),
+		Posts:   search.Run(c.Posts, q),
 		Authors: c.Authors,
 		Tags:    c.Tags,
 		Years:   c.Years,
 	}
 	for i, name := range months {
 		data.Months = append(data.Months, monthOption{Value: i + 1, Name: name})
-	}
-	if data.Result.PrevPage != 0 {
-		data.PrevURL = pageURL(q, data.Result.PrevPage)
-	}
-	if data.Result.NextPage != 0 {
-		data.NextURL = pageURL(q, data.Result.NextPage)
 	}
 
 	body, err := s.render("articles.html", view{
@@ -69,11 +58,4 @@ func (s *Site) serveArticles(w http.ResponseWriter, r *http.Request) {
 		gz = gzipBytes(body)
 	}
 	writeBody(w, r, http.StatusOK, body, gz)
-}
-
-// pageURL links to page n of the results, keeping the filters.
-func pageURL(q search.Query, n int) string {
-	v := q.Values()
-	v.Set("page", strconv.Itoa(n))
-	return articlesPath + "?" + v.Encode()
 }
