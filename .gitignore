@@ -1,0 +1,6 @@
+# Backups
+backup/
+
+# Intermediate docs
+docs/plan-*
+docs/spec-*
