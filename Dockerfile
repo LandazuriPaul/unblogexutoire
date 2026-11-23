@@ -3,7 +3,7 @@
 # Builds with the same pinned Go (mise/mise.lock) as local and CI builds. The builder runs on
 # the build machine's platform and cross-compiles for the target one (linux/amd64, set by
 # `mise run image:build`), so building on an arm64 Mac needs no emulation.
-FROM --platform=$BUILDPLATFORM ghcr.io/jdx/mise:2026.10.13-debian AS builder
+FROM --platform=$BUILDPLATFORM ghcr.io/jdx/mise:2026.11.12-debian AS builder
 ARG TARGETOS TARGETARCH
 
 # Base mise config only (mise/config.toml: Go), not the dev tools (gopls)
