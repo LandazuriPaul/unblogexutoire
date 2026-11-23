@@ -3,4 +3,4 @@
 #MISE depends=["image:build"]
 set -euo pipefail
 
-docker run --rm -p 8080:8080 --read-only --cap-drop=ALL ghcr.io/landazuripaul/unblogexutoire:latest
+docker run --rm --platform linux/amd64 -p 8080:8080 --read-only --cap-drop=ALL ghcr.io/landazuripaul/unblogexutoire:latest

@@ -17,10 +17,10 @@ COPY mise/config.toml mise/mise.lock mise/
 RUN mise install --locked
 
 COPY go.mod go.sum ./
-RUN mise exec -- go mod download && mise exec -- go mod verify
+RUN go mod download && go mod verify
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH mise exec -- go build -trimpath -ldflags="-s -w" -o /out/unblogexutoire .
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/unblogexutoire .
 
 FROM gcr.io/distroless/static-debian12:nonroot
 
