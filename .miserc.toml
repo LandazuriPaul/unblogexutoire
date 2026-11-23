@@ -1,0 +1,3 @@
+# Default mise environment for local development: load mise/config.dev.toml (gopls) on top
+# of mise/config.toml. CI and Docker builds override this with MISE_ENV="" (base only).
+env = ["dev"]

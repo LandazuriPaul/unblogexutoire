@@ -1,0 +1,5 @@
+# Developer tooling (local only: MISE_ENV=dev), on top of config.toml.
+
+[tools]
+# Go language server, for editors without a bundled one (e.g. Zed)
+"go:golang.org/x/tools/gopls" = "0.24.0"

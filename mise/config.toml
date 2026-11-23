@@ -1,0 +1,24 @@
+# Base mise configuration, loaded everywhere (local, CI, Docker builds).
+#   config.toml      Go + all tasks                 -> local, CI, Docker build
+#   config.dev.toml  editor tooling (gopls, for Zed) -> local only (MISE_ENV=dev, see .miserc.toml)
+# Each config is locked in its own lockfile (mise.lock, mise.dev.lock): after a version
+# change, run `mise lock --platform linux-x64,linux-arm64,macos-arm64`.
+# Upgrading Go: bump `go` here and the `go` line in go.mod, then lock.
+
+[tools]
+go = "1.27.4"
+
+[env]
+# Always use the Go installed by mise: never let a GOTOOLCHAIN from the user's go env file
+# (or a go.mod toolchain line) switch to a downloaded toolchain.
+GOTOOLCHAIN = "local"
+
+# Tasks: `mise run <task>`, `mise tasks` to list them. CI runs the same tasks.
+
+[tasks.vet]
+description = "Check formatting (gofmt) and vet all packages"
+run = ['test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }', "go vet ./..."]
+
+[tasks.test]
+description = "Run all tests"
+run = "go test ./..."
