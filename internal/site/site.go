@@ -72,7 +72,28 @@ func New(cfg Config) (*Site, error) {
 			return nil, fmt.Errorf("render %s: %w", r.path, err)
 		}
 	}
+
+	feed, err := s.feed()
+	if err != nil {
+		return nil, fmt.Errorf("render feed: %w", err)
+	}
+	s.put("/rss/", "application/atom+xml; charset=utf-8", feed)
+	sm, err := s.sitemap()
+	if err != nil {
+		return nil, fmt.Errorf("render sitemap: %w", err)
+	}
+	s.put("/sitemap.xml", "application/xml; charset=utf-8", sm)
+	s.put("/robots.txt", "text/plain; charset=utf-8", s.robots())
 	return s, nil
+}
+
+func sortedKeys[V any](m map[string]V) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	slices.Sort(keys)
+	return keys
 }
 
 // pageRoute is a pre-rendered HTML route.
