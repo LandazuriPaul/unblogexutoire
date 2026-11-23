@@ -79,4 +79,6 @@ Every push to `main` runs the checks, then pushes `ghcr.io/landazuripaul/unbloge
   mise run test
   ```
 
-`mise/config.toml` sets `GOTOOLCHAIN=local`, so the Go that mise installs is always the one used.
+`mise/config.toml` sets `GOTOOLCHAIN=local`, so the Go that mise installs is always the one used,
+even if a global `go env -w GOTOOLCHAIN=…` would otherwise make Go download and switch to
+another toolchain.
