@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{if .Title}}{{.Title}} · {{end}}{{siteName}}</title>
+<meta name="description" content="{{.Description}}">
+<meta property="og:site_name" content="{{siteName}}">
+<meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}{{siteName}}{{end}}">
+<meta property="og:description" content="{{.Description}}">
+<meta property="og:type" content="{{.OGType}}">
+<meta property="og:url" content="{{url .Path}}">
+<link rel="canonical" href="{{url .Path}}">
+<link rel="alternate" type="application/atom+xml" title="{{siteName}}" href="/rss/">
+<link rel="stylesheet" href="{{css}}">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="/">{{siteName}}</a>
+  <nav>
+    <a href="/articles/">Articles</a>
+    {{- if hasPage "a-propos"}}
+    <a href="/a-propos/">À propos</a>
+    {{- end}}
+  </nav>
+</header>
+<main>
+{{block "content" .}}{{end}}
+</main>
+<footer class="site-footer">
+  <a href="/rss/">Flux Atom</a>
+</footer>
+</body>
+</html>
+{{define "postlist"}}
+<ul class="post-list">
+{{- range .}}
+  <li>
+    <h2><a href="/{{.Slug}}/">{{.Title}}</a></h2>
+    <p class="meta"><time datetime="{{isodate .Date}}">{{frdate .Date}}</time> · {{range $i, $a := .Authors}}{{if $i}}, {{end}}{{$a.Name}}{{end}}</p>
+    <p>{{.Description}}</p>
+  </li>
+{{- end}}
+</ul>
+{{end}}

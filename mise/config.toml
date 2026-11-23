@@ -15,6 +15,14 @@ GOTOOLCHAIN = "local"
 
 # Tasks: `mise run <task>`, `mise tasks` to list them. CI runs the same tasks.
 
+[tasks.dev]
+description = "Serve locally on :8080, drafts included"
+run = "go run . -drafts -base-url http://localhost:8080"
+
+[tasks.serve]
+description = "Serve locally on :8080 exactly as production does (no drafts)"
+run = "go run ."
+
 [tasks.vet]
 description = "Check formatting (gofmt) and vet all packages"
 run = ['test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }', "go vet ./..."]
