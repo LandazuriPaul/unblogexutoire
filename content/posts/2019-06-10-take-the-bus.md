@@ -1,0 +1,25 @@
+---
+title: "L'âne trotro, trotro..."
+slug: take-the-bus
+date: "2019-06-10T01:36:15.000Z"
+authors:
+  - octavia-genta
+tags:
+  - "récit"
+  - "absurde"
+---
+
+*Bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip, bip.*
+
+Bienvenue en Macronie.
+
+- 6h54 : Des voix montent dans la rue vous sortant du sommeil. Par la fenêtre, deux hommes déchargeant une camionnette et plaçant les engins par lots de trois ou quatre sur la place en bas de chez vous. Dans le milieu, on les appelle les "juicers"; ce sont eux qui chargent, rechargent et déchargent. Vous vous dites surtout que c'est eux qui sont en train de se faire aspirer jusqu'à la moelle par *Lemon*, *GoTo,* *Donkeys*, et autres noms minimalistes parce que Léo, le mec de la com a dit "plus c'est court, plus c'est punchy".
+- 8h30 : Vous sortez de chez vous, les trottinettes ne sont déjà plus sur la place mais quelques mètres plus loin, vous apercevez un quinquagénaire, avec à la main le nouvel iPhone XV. Vous vous sentez tel.le un.e anthropologue de la jungle urbaine et vous approchez suffisamment pour l'entendre pester. Vous ne voudriez pas effrayer le spécimen qui tente désespérément de *flasher* le *QR code*: c'est Léo, le petit dernier du service com', qui lui a montré comment faire.
+- 9h16 : Vous allez rejoindre votre amie et tentez de traverser sur un passage piéton quand, arrivé de nul part, un jeune homme au total look *premesu* vous coupe la route. C'est odieux. Le triste spectacle d'une société qui veut tout, tout de suite et sans effort vous saute aux yeux : le logo *Uber Mangiare* sur la devanture des restaurants vides, les panneaux publicitaires à écran LCD au cas où vous auriez oublié votre téléphone, tablette, liseuse (*rayez la mention inutile*) et, bien sûr, ces immondices à deux roues, trouvables n'importe où tant que vous habitez l'hypercentre et que vous ne faites pas partie de la population reléguée. Tout en le regardant s'éloigner, vous remarquez sa drôle de dégaine : immobile, le regard apathique. Il ressemble drôlement à un âne. Il n'attendra que la fin de ce voyage sans effort pour s'enorgueillir de cette *merveilleuse* *innovation disruptive* dont il se vantera qu'il était *"*le premier à savoir que ça *prendrait".*
+- 10h44 : Vous sortez du café dans lequel vous preniez votre traditionnel *poga* fraise du mardi avec Martha. Durant la conversation, le *bip* caractéristique vous fait tout.e.s deux grincer des dents. Vous regardez votre amie, camarade d'infortune qui augmente le volume de sa voix pour cacher ce bruit insupportable.
+- 11h18 : Toutes les trottinettes sont de sortie, disposées à l'arraché sur les trottoirs. Grâce à vos cours de théâtre à la MJC du coin, vous feignez la maladresse et vous les renversez par "inadvertance". Vous esquissez un sourire, seule marque visible de votre plaisir coupable.
+- 16h36 : Sortie d'école. Vous regardez avec tristesse les enfants condamnés à trotter sur les places bétonnées pendant que les parents jouent à *BonbonCrush*,en vous souvenant du temps où, à leur âge, vous alliez construire des cabanes, jouer à chat, observer les fourmis, VIVRE.
+- 18h12 : Vous rejoignez Thomas et son ami. Vous n'êtez pas fan de son pote mais ça fait longtemps que vous n'avez pas vu Martin. Au bout d'une heure, vous prétextez un imprévu mais en réalité, vous quittez la conversation, exaspéré.e par le *bobosplaining* du pote (qui picore ses amandes en vrac dans un vieux sachet pourri estampillé *cbonnaturalbio*).
+- 19h23 : Martha vous a vu partir en trombe du bar, elle vous interpelle. Vous la saluez vaguement avant d'enchaîner un discours fiévreux sur ces foutues machines ; vous êtes essouflé.e. Martha vous paye une bière, vous l'avez bien méritée. Sur le chemin, des trottinettes macronistes vous barrent la route, vous vous exclamez : "ah tu vois, regarde !!!". Avant de partir, elle vous prendra dans ses bras en vous murmurant à l'oreille le secret ultime à propos des trottinettes.
+- 22h03 : Ereinté.e par cette journée, vous vous traînez à l'arrêt de bus pour regarder les horaires de nuit. Plus de bus. Une trottinette. Vous partez dans la direction opposée. Vous pestez contre le réseau de bus mal fichu. De toute façon, même quand il y a encore des bus, ils n'en font qu'à leur tête mais ça, c'est une autre histoire...
+- 23h57 : Vous avez rejoint Amour et vous avez marché un moment le long de la berge. Le bruit de la ville se fait discret et l'on voit la lune croître dans le ciel. La nuit est paisible, les lumières des immeubles se sont éteintes les une après les autres laissant le noir envahir le cour d'eau, on ne se croirait presque plus en ville et personne à l'horizon. Sur le pont où vous vous êtes posé.e.s, une trottinette rescapée des *juicers*. Un sourire se dessine sur votre visage. Vous lui confiez le secret de Martha : pour supporter ces absurdités, la nuit venue, elle les jette à l'eau. Vous échangez un regard complice et entendu avec votre Amour. Vous saisissez la trottinette et la jetez violemment par dessus le pont. Un "*plouf*" résonne en écho, seul témoin de votre Petite Révolution.
