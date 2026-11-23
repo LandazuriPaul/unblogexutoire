@@ -3,9 +3,9 @@
 <article class="post">
   <header>
     <h1>{{.Post.Title}}</h1>
-    <p class="meta">
-      <time datetime="{{isodate .Post.Date}}">{{frdate .Post.Date}}</time> ·
-      {{range $i, $a := .Post.Authors}}{{if $i}}, {{end}}<a href="/author/{{$a.Slug}}/">{{$a.Name}}</a>{{end}}
+    <p class="byline">
+      Par {{range $i, $a := .Post.Authors}}{{if $i}}, {{end}}<a href="/author/{{$a.Slug}}/">{{$a.Name}}</a>{{end}},
+      le <time datetime="{{isodate .Post.Date}}">{{frdate .Post.Date}}</time>
     </p>
     {{- if .Post.Tags}}
     <ul class="tags">

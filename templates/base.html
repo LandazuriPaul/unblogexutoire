@@ -36,8 +36,9 @@
 <ul class="post-list">
 {{- range .}}
   <li>
+    <time class="date" datetime="{{isodate .Date}}">{{frdate .Date}}</time>
     <h2><a href="/{{.Slug}}/">{{.Title}}</a></h2>
-    <p class="meta"><time datetime="{{isodate .Date}}">{{frdate .Date}}</time> · {{range $i, $a := .Authors}}{{if $i}}, {{end}}{{$a.Name}}{{end}}</p>
+    <p class="by">par {{range $i, $a := .Authors}}{{if $i}}, {{end}}{{$a.Name}}{{end}}</p>
     <p>{{.Description}}</p>
   </li>
 {{- end}}

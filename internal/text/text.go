@@ -56,8 +56,11 @@ func Words(s string) []string {
 }
 
 // Excerpt returns the first n words of plain, followed by "…" when it was truncated.
+// Zero-width characters count as spaces: the Ghost export used them as line breaks.
 func Excerpt(plain string, n int) string {
-	words := strings.Fields(plain)
+	words := strings.FieldsFunc(plain, func(r rune) bool {
+		return unicode.IsSpace(r) || r == '​' || r == '‌' || r == '‍'
+	})
 	if len(words) <= n {
 		return strings.Join(words, " ")
 	}

@@ -52,4 +52,8 @@ func TestExcerpt(t *testing.T) {
 	if got, want := text.Excerpt("un deux", 3), "un deux"; got != want {
 		t.Errorf("Excerpt = %q, want %q", got, want)
 	}
+	// Ghost exported some line breaks as zero-width non-joiners.
+	if got, want := text.Excerpt("passe,‌‌Les jours​ont", 5), "passe, Les jours ont"; got != want {
+		t.Errorf("Excerpt = %q, want %q", got, want)
+	}
 }
