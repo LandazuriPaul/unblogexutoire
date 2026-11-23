@@ -15,5 +15,9 @@ if [[ -n "$(git -C "$root" status --porcelain)" ]]; then
   tag="${tag}-dirty"
 fi
 
-printf "> Building %s with tags:\n- %s\n- latest\n\n" "$image" "$tag"
-DOCKER_BUILDKIT=1 docker build -t "$image:$tag" -t "$image:latest" "$root"
+# Always the cluster's platform, even from an arm64 Mac: a laptop push must never replace
+# CI's amd64 image with an arm64 one. `image:run` still works locally through emulation.
+platform="linux/amd64"
+
+printf "> Building %s (%s) with tags:\n- %s\n- latest\n\n" "$image" "$platform" "$tag"
+DOCKER_BUILDKIT=1 docker build --platform "$platform" -t "$image:$tag" -t "$image:latest" "$root"
