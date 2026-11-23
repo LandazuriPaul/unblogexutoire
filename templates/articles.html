@@ -1,0 +1,71 @@
+{{define "content"}}
+{{- with .Data}}
+<h1>Articles</h1>
+<form class="search" method="get" action="/articles/">
+  <p class="field field-q">
+    <label for="q">Rechercher</label>
+    <input type="search" id="q" name="q" value="{{.Query.Text}}" maxlength="200" placeholder="Un mot, une phrase…">
+  </p>
+  <p class="field">
+    <label for="auteur">Auteur</label>
+    <select id="auteur" name="auteur">
+      <option value="">Tous les auteurs</option>
+      {{- range .Authors}}
+      <option value="{{.Slug}}"{{if eq .Slug $.Data.Query.Author}} selected{{end}}>{{.Name}}</option>
+      {{- end}}
+    </select>
+  </p>
+  <p class="field">
+    <label for="tag">Étiquette</label>
+    <select id="tag" name="tag">
+      <option value="">Toutes les étiquettes</option>
+      {{- range .Tags}}
+      <option value="{{.Slug}}"{{if eq .Slug $.Data.Query.Tag}} selected{{end}}>{{.Name}}</option>
+      {{- end}}
+    </select>
+  </p>
+  <p class="field">
+    <label for="annee">Année</label>
+    <select id="annee" name="annee">
+      <option value="">Toutes les années</option>
+      {{- range .Years}}
+      <option value="{{.}}"{{if eq . $.Data.Query.Year}} selected{{end}}>{{.}}</option>
+      {{- end}}
+    </select>
+  </p>
+  <p class="field">
+    <label for="mois">Mois</label>
+    <select id="mois" name="mois">
+      <option value="">Tous les mois</option>
+      {{- range .Months}}
+      <option value="{{.Value}}"{{if eq .Value $.Data.Query.Month}} selected{{end}}>{{.Name}}</option>
+      {{- end}}
+    </select>
+  </p>
+  <p class="actions">
+    <button type="submit">Filtrer</button>
+    {{- if not .Query.IsZero}}
+    <a href="/articles/">Réinitialiser</a>
+    {{- end}}
+  </p>
+</form>
+
+<p class="count">{{.Result.Total}} article{{if gt .Result.Total 1}}s{{end}}</p>
+{{- if .Result.Posts}}
+{{template "postlist" .Result.Posts}}
+{{- else}}
+<p class="empty">Aucun article ne correspond à ces critères.</p>
+{{- end}}
+
+{{- if or .PrevURL .NextURL}}
+<nav class="pagination">
+  {{- with .PrevURL}}
+  <a class="prev" href="{{.}}">← Plus récents</a>
+  {{- end}}
+  {{- with .NextURL}}
+  <a class="next" href="{{.}}">Plus anciens →</a>
+  {{- end}}
+</nav>
+{{- end}}
+{{- end}}
+{{end}}

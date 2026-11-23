@@ -64,7 +64,9 @@ func (s *Site) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		s.serveEntry(w, r, s.css, http.StatusOK)
 	case s.routes[path] != nil:
 		s.serveEntry(w, r, s.routes[path], http.StatusOK)
-	case !strings.HasSuffix(path, "/") && s.routes[path+"/"] != nil:
+	case path == articlesPath:
+		s.serveArticles(w, r)
+	case !strings.HasSuffix(path, "/") && (s.routes[path+"/"] != nil || path+"/" == articlesPath):
 		target := path + "/"
 		if r.URL.RawQuery != "" {
 			target += "?" + r.URL.RawQuery
