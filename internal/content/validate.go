@@ -1,10 +1,13 @@
 package content
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
+	"path"
 	"regexp"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/LandazuriPaul/unblogexutoire/internal/text"
@@ -76,17 +79,46 @@ func (l *loader) loadAuthors() map[string]*Author {
 	return authors
 }
 
-func (l *loader) files(pattern string) []string {
-	names, err := fs.Glob(l.fsys, pattern)
+// files returns the *.md files directly under dir. Anything else in dir (another extension,
+// a subdirectory) is an error, so a misnamed post fails loudly instead of silently vanishing.
+// Hidden files are ignored: embed never includes them.
+func (l *loader) files(dir string) []string {
+	var names []string
+	err := fs.WalkDir(l.fsys, dir, func(p string, d fs.DirEntry, err error) error {
+		switch {
+		case err != nil:
+			if errors.Is(err, fs.ErrNotExist) && p == dir {
+				return nil
+			}
+			return err
+		case p == dir:
+			return nil
+		case strings.HasPrefix(d.Name(), "."):
+			if d.IsDir() {
+				return fs.SkipDir
+			}
+			return nil
+		case d.IsDir():
+			return nil // its files are reported below
+		case path.Dir(p) != dir:
+			l.fail(p, "unexpected subdirectory: put the file directly in %s/", dir)
+			return nil
+		case path.Ext(p) != ".md":
+			l.fail(p, "unexpected file: %s/ only holds files ending in .md", dir)
+			return nil
+		}
+		names = append(names, p)
+		return nil
+	})
 	if err != nil {
-		l.fail(pattern, "%v", err)
+		l.fail(dir, "%v", err)
 	}
 	return names
 }
 
 func (l *loader) loadPosts(authors map[string]*Author) []*Post {
 	var posts []*Post
-	for _, file := range l.files("posts/*.md") {
+	for _, file := range l.files("posts") {
 		var meta postMeta
 		body, ok := l.readMeta(file, &meta)
 		if !ok {
@@ -132,7 +164,7 @@ func (l *loader) loadPosts(authors map[string]*Author) []*Post {
 
 func (l *loader) loadPages() []*Page {
 	var pages []*Page
-	for _, file := range l.files("pages/*.md") {
+	for _, file := range l.files("pages") {
 		var meta pageMeta
 		body, ok := l.readMeta(file, &meta)
 		if !ok {

@@ -205,6 +205,21 @@ func TestValidationErrors(t *testing.T) {
 	}
 }
 
+func TestMisplacedFilesRejected(t *testing.T) {
+	for _, name := range []string{"posts/m.markdown", "posts/m.MD", "posts/2026/m.md", "pages/sub/p.md", "posts/m.txt"} {
+		t.Run(name, func(t *testing.T) {
+			_, err := content.Load(fixture(map[string]string{name: post("m", "2020-01-01", "", "x")}), content.LoadOptions{})
+			if err == nil || !strings.Contains(err.Error(), name) {
+				t.Errorf("err = %v, want an error naming %s", err, name)
+			}
+		})
+	}
+	// Hidden files (.DS_Store, editor swap files) are never embedded, so they're ignored.
+	if _, err := content.Load(fixture(map[string]string{"posts/.DS_Store": "x"}), content.LoadOptions{}); err != nil {
+		t.Errorf("hidden file rejected: %v", err)
+	}
+}
+
 func TestAuthorsFileErrors(t *testing.T) {
 	for name, data := range map[string]string{
 		"duplicate": "- slug: a\n  name: A\n- slug: a\n  name: B\n",
